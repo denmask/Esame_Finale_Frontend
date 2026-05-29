@@ -145,18 +145,6 @@ body {
   flex: 1;
 }
 
-.navbar-destra { margin-left: auto; }
-
-/* ✏️ ESAME: questa è la data STATICA (niente new Date()) */
-.badge-data {
-  font-size: 12px;
-  color: var(--testo-soft);
-  background: var(--bg);
-  padding: 3px 10px;
-  border-radius: 20px;
-  border: 1px solid var(--bordo);
-}
-
 .pagina {
   padding: 1.8rem 2.2rem;
   flex: 1;

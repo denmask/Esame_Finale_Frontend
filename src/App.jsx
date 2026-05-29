@@ -42,19 +42,14 @@ export default function App() {
       </aside>
 
       {/* ---- AREA PRINCIPALE ---- */}
-<div className="contenuto">
-  <header className="navbar">
-    <button className="toggle-sidebar" onClick={() => setSidebarAperta(s => !s)}>
-      {sidebarAperta ? "«" : "»"}
-    </button>
-    {/* 🖊 ESAME: cambia il titolo navbar */}
-    <h1 className="navbar-titolo">La tua dashboard</h1>
-    {/* 🖊  ESAME: cambia questa stringa con la data FISSA del giorno dell'esame
-        oppure lascia vuota la div per non mostrare nulla */}
-    <div className="navbar-destra">
-      <span className="badge-data"></span>
-    </div>
-  </header>
+      <div className="contenuto">
+        <header className="navbar">
+          <button className="toggle-sidebar" onClick={() => setSidebarAperta(s => !s)}>
+            {sidebarAperta ? "«" : "»"}
+          </button>
+          {/* 🖊 ESAME: cambia il titolo navbar */}
+          <h1 className="navbar-titolo">La tua dashboard</h1>
+        </header>
 
         <main className="pagina">
           {pagina === "elementi"    && <PaginaElementi    {...dati} />}
