@@ -1,33 +1,23 @@
 import { useState } from "react";
 import "./index.css";
 
-// ✏️ ESAME: importa le tue pagine dalla cartella pages/
-// Rinomina i file importati in base alla tua consegna
 import Dashboard from "./pages/Dashboard";
-import Elementi from "./pages/Elementi";         // Rinomina in base al dominio
-import Transazioni from "./pages/Transazioni";   // Rinomina in base al dominio
+import Eventi from "./pages/Eventi";
+import Prenotazioni from "./pages/Prenotazioni";
 import Report from "./pages/Report";
 
-// ✏️ ESAME: importa i componenti wrapper
 import Navbar from "./components/Navbar";
 import Sidebar from "./components/Sidebar";
 
-// ============================================================
-// APP ROOT
-// ============================================================
+
 export default function App() {
-  const [pagina, setPagina] = useState("dashboard"); // pagina iniziale
+  const [pagina, setPagina] = useState("dashboard"); 
   const [sidebarAperta, setSidebarAperta] = useState(true);
 
-  // ✏️ ESAME: cambia le voci del menu in base al tuo dominio
-  // Esempi:
-  // { id: "camere", etichetta: "Camere" }
-  // { id: "libri", etichetta: "Libri" }
-  // { id: "spazi", etichetta: "Spazi" }
   const voci = [
     { id: "dashboard", etichetta: "Dashboard" },
-    { id: "elementi", etichetta: "Elementi" },      // Rinomina questa voce
-    { id: "transazioni", etichetta: "Transazioni" }, // Rinomina questa voce
+    { id: "eventi", etichetta: "Eventi" }, 
+    { id: "prenotazioni", etichetta: "Prenotazioni" }, 
     { id: "report", etichetta: "Report" },
   ];
 
@@ -35,28 +25,23 @@ export default function App() {
     <div
       className={`app ${sidebarAperta ? "sidebar-aperta" : "sidebar-chiusa"}`}
     >
-      {/* SIDEBAR */}
       <Sidebar
         pagina={pagina}
         setPagina={setPagina}
         voci={voci}
-        brand={{ acc: "my", brand: "app" }} // ✏️ ESAME: cambia il brand
+        brand={{ acc: "App", brand: "Eventi Live" }} 
       />
 
-      {/* AREA PRINCIPALE */}
       <div className="contenuto">
-        {/* NAVBAR */}
         <Navbar
           sidebarAperta={sidebarAperta}
           setSidebarAperta={setSidebarAperta}
-          titolo="La tua dashboard" // ✏️ ESAME: cambia il titolo navbar
+          titolo="La mia dashboard"
         />
-
-        {/* PAGINE */}
         <main className="pagina">
           {pagina === "dashboard" && <Dashboard />}
-          {pagina === "elementi" && <Elementi />}        {/* Rinomina se necessario */}
-          {pagina === "transazioni" && <Transazioni />}  {/* Rinomina se necessario */}
+          {pagina === "eventi" && <Eventi />}
+          {pagina === "prenotazioni" && <Prenotazioni />}
           {pagina === "report" && <Report />}
         </main>
       </div>

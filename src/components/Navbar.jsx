@@ -1,7 +1,3 @@
-// ============================================================
-// COMPONENTE NAVBAR
-// ============================================================
-
 export default function Navbar({ sidebarAperta, setSidebarAperta, titolo }) {
   return (
     <header className="navbar">
@@ -12,8 +8,7 @@ export default function Navbar({ sidebarAperta, setSidebarAperta, titolo }) {
       >
         {sidebarAperta ? "«" : "»"}
       </button>
-      {/* ✏️ ESAME: cambia il titolo della navbar se necessario */}
-      <h1 className="navbar-titolo">{titolo || "La tua dashboard"}</h1>
+      <h1 className="navbar-titolo">{titolo || "La mia dashboard"}</h1>
     </header>
   );
 }

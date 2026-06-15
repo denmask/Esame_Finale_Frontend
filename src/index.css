@@ -1,11 +1,8 @@
-/* ============================================================
-   RESET & VARIABILI
-   ✏️ ESAME: puoi modificare i colori qui, cambiano ovunque
-   ============================================================ */
+
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
 :root {
-  /* Palette B&N — sostituisci solo questi se vuoi un altro tema */
+
   --bg:          #f5f5f5;
   --bg-card:     #ffffff;
   --sidebar-bg:  #111111;
@@ -13,16 +10,14 @@
   --sidebar-act: #ffffff;
   --testo:       #111111;
   --testo-soft:  #555555;
-  --bordo:       #e0e0e0;
-  --acc:         #111111;   /* colore accento (bordi attivi, bottone primario) */
+  --bordo:       #faef51;
+  --acc:         #111111;  
   --acc-soft:    #333333;
 
-  /* Colori badge stato (solo sui grafici e badge) */
   --stato-ok:    #111111;
   --stato-busy:  #555555;
   --stato-maint: #999999;
 
-  /* Colori badge tipo */
   --tipo-a:  #222222;
   --tipo-b:  #555555;
   --tipo-c:  #888888;
@@ -34,7 +29,6 @@
   --ombra:     0 1px 3px rgba(0,0,0,0.07);
 }
 
-/* Font di sistema — NON usa Google Fonts per non sembrare AI */
 body {
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
   background: var(--bg);
@@ -44,14 +38,8 @@ body {
   min-height: 100vh;
 }
 
-/* ============================================================
-   LAYOUT APP
-   ============================================================ */
 .app { display: flex; min-height: 100vh; }
 
-/* ============================================================
-   SIDEBAR
-   ============================================================ */
 .sidebar {
   width: var(--sidebar-w);
   background: var(--sidebar-bg);
@@ -76,7 +64,6 @@ body {
   border-bottom: 1px solid rgba(255,255,255,0.07);
   margin-bottom: 0.4rem;
 }
-/* ✏️ ESAME: .logo-acc = la parte colorata del brand */
 .logo-acc   { color: #ffffff; }
 .logo-brand { color: #888888; }
 
@@ -102,9 +89,6 @@ body {
 
 .sidebar-footer { padding: 0.8rem 1.4rem; border-top: 1px solid rgba(255,255,255,0.06); }
 
-/* ============================================================
-   AREA CONTENUTO + NAVBAR
-   ============================================================ */
 .contenuto {
   margin-left: var(--sidebar-w);
   flex: 1;
@@ -151,9 +135,6 @@ body {
   max-width: 1100px;
 }
 
-/* ============================================================
-   TIPOGRAFIA
-   ============================================================ */
 .titolo-pagina { font-size: 1.4rem; font-weight: 700; color: var(--testo); }
 .sottotitolo   { font-size: 12.5px; color: var(--testo-soft); margin-top: 2px; }
 .sezione-header {
@@ -164,9 +145,6 @@ body {
   gap: 1rem;
 }
 
-/* ============================================================
-   CARD
-   ============================================================ */
 .card {
   background: var(--bg-card);
   border: 1px solid var(--bordo);
@@ -177,9 +155,6 @@ body {
 .card-titolo { font-size: 0.9rem; font-weight: 600; margin-bottom: 1.1rem; color: var(--testo); }
 .form-card   { margin-bottom: 1.4rem; }
 
-/* ============================================================
-   BOTTONI
-   ============================================================ */
 .btn-primario {
   background: var(--acc);
   color: #fff;
@@ -206,9 +181,6 @@ body {
 }
 .btn-secondario:hover { background: var(--bg); }
 
-/* ============================================================
-   BADGE TIPO e STATO
-   ============================================================ */
 .badge-tipo {
   display: inline-block;
   padding: 2px 8px;
@@ -218,7 +190,6 @@ body {
   letter-spacing: 0.3px;
   color: #fff;
 }
-/* ✏️ ESAME: puoi scegliere altri colori qui */
 .tipo-a { background: var(--tipo-a); }
 .tipo-b { background: var(--tipo-b); }
 .tipo-c { background: var(--tipo-c); }
@@ -231,7 +202,7 @@ body {
   font-weight: 500;
   color: #fff;
 }
-.stato-ok   { background: var(--stato-ok); }
+.stato-   { background: var(--stato-ok); }
 .stato-busy { background: var(--stato-busy); }
 .stato-maint { background: var(--stato-maint); }
 
@@ -244,9 +215,6 @@ body {
   color: var(--testo);
 }
 
-/* ============================================================
-   FILTRI
-   ============================================================ */
 .filtri-barra {
   display: flex;
   flex-wrap: wrap;
@@ -276,9 +244,6 @@ body {
 .chip:hover      { border-color: var(--acc); color: var(--testo); }
 .chip-attivo     { background: var(--acc); color: #fff; border-color: var(--acc); }
 
-/* ============================================================
-   GRIGLIA ELEMENTI (card)
-   ============================================================ */
 .griglia-elementi {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
@@ -328,8 +293,6 @@ body {
   background: var(--bg);
   cursor: pointer;
 }
-
-/* Stato vuoto */
 .stato-vuoto {
   text-align: center;
   padding: 2.5rem;
@@ -339,14 +302,10 @@ body {
   border-radius: var(--raggio);
 }
 
-/* Card selezionabile (step 1 transazioni) */
 .card-selezionabile { cursor: pointer; transition: border-color 0.15s; }
 .card-selezionabile:hover { border-color: var(--acc); }
 .card-selezionata   { border-color: var(--acc); box-shadow: 0 0 0 2px var(--acc); }
 
-/* ============================================================
-   FORM
-   ============================================================ */
 .griglia-form {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -376,9 +335,6 @@ body {
 }
 .campo-errore { font-size: 11.5px; color: #cc0000; }
 
-/* ============================================================
-   STEP INDICATORI
-   ============================================================ */
 .step-indicatori {
   display: flex;
   gap: 0.5rem;
@@ -399,10 +355,7 @@ body {
 .step-fatto  { background: var(--acc); color: #fff; border-color: var(--acc); }
 .step-numero { font-weight: 700; font-size: 12px; }
 
-/* ============================================================
-   FORM TRANSAZIONE
-   ============================================================ */
-.form-transazione { max-width: 560px; display: flex; flex-direction: column; gap: 1rem; }
+.form-prenotazione { max-width: 560px; display: flex; flex-direction: column; gap: 1rem; }
 .griglia-orari    { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
 .istruzione       { font-size: 13px; color: var(--testo-soft); margin-bottom: 1rem; }
 .azioni-step      { display: flex; justify-content: flex-end; margin-top: 1rem; }
@@ -431,9 +384,6 @@ body {
 .costo-dettaglio { font-size: 13px; color: var(--testo-soft); }
 .costo-totale    { font-size: 1rem; font-weight: 700; }
 
-/* ============================================================
-   CONFERMA STEP 3
-   ============================================================ */
 .conferma-card   { max-width: 480px; text-align: center; }
 .conferma-icona  { font-size: 2.5rem; margin-bottom: 0.75rem; }
 .conferma-titolo { font-size: 1.1rem; font-weight: 700; margin-bottom: 1.2rem; }
@@ -448,9 +398,7 @@ body {
 .riep-valore { font-size: 13.5px; font-weight: 500; }
 .totale-label, .totale-valore { font-weight: 700; font-size: 1rem; border-top: 1px solid var(--bordo); padding-top: 0.5rem; }
 
-/* ============================================================
-   KPI GRID
-   ============================================================ */
+
 .kpi-grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
@@ -469,9 +417,6 @@ body {
 .kpi-label  { font-size: 12px; color: var(--testo-soft); font-weight: 500; }
 .kpi-valore { font-size: 1.65rem; font-weight: 700; color: var(--testo); }
 
-/* ============================================================
-   GRAFICI
-   ============================================================ */
 .grafici-griglia {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -492,9 +437,6 @@ body {
 .legenda-voce  { display: flex; align-items: center; gap: 5px; font-size: 12px; }
 .legenda-quadrato { width: 10px; height: 10px; border-radius: 2px; flex-shrink: 0; }
 
-/* ============================================================
-   TABELLA
-   ============================================================ */
 .tabella-wrapper { overflow-x: auto; }
 .tabella {
   width: 100%;

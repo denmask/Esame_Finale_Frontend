@@ -1,34 +1,24 @@
 import { useState } from "react";
 import { useDati, TIPI, STATI, calcolaQuantita } from "../data";
 
-// ============================================================
-// PAGINA TRANSAZIONI/PRENOTAZIONI
-// ✏️ ESAME: RINOMINA QUESTO FILE
-// Esempi: Prenotazioni.jsx, Prestiti.jsx, Ordini.jsx, Prenotazioni.jsx
-// ============================================================
-// Contiene: form 3-step (selezione, dettagli, conferma)
-
-export default function Transazioni() {
-  const { elementi, transazioni, aggiungiTransazione } = useDati();
-  const elementiDisponibili = elementi.filter(e => e.stato === STATI[0]); // primo stato = disponibile
+export default function Prenotazioni () {
+  const { eventi, prenotazioni, aggiungiPrenotazione } = useDati();
+  const eventiDisponibili = eventi.filter(e => e.stato === STATI[0]); 
   
   const [step, setStep] = useState(1);
   const [selezionato, setSelezionato] = useState(null);
   const [form, setForm] = useState({
-    utente: "",
-    data: "",
+    utente: "Nome Cognome",
+    data: "24/05/2026",
     inizio: "09:00",
     fine: "17:00",
   });
   const [errori, setErrori] = useState({});
   const [confermata, setConfermata] = useState(null);
 
-  // CALCOLI
   const quantita = selezionato ? calcolaQuantita(form.inizio, form.fine) : 0;
-  // ✏️ ESAME: cambia la formula del totale se necessario
-  const totale = selezionato ? quantita * selezionato.campo2 : 0;
+  const totale = selezionato ? quantita * selezionato.Capienza : 0;
 
-  // VALIDAZIONE
   function valida() {
     const e = {};
     if (!form.utente.trim()) e.utente = "Inserisci il nome";
@@ -37,7 +27,6 @@ export default function Transazioni() {
     return e;
   }
 
-  // CONFERMA TRANSAZIONE
   function conferma(ev) {
     ev.preventDefault();
     const e = valida();
@@ -45,23 +34,20 @@ export default function Transazioni() {
       setErrori(e);
       return;
     }
-    const nuova = {
+    const nuova = {      
       utente: form.utente,
-      elementoId: selezionato.id,
-      elementoNome: selezionato.nome,
+      eventoId: selezionato.id,
       tipo: selezionato.tipo,
       data: form.data,
       inizio: form.inizio,
       fine: form.fine,
       quantita,
-      totale,
+      totale: Number(totale)
     };
-    aggiungiTransazione(nuova);
+    aggiungiPrenotazione(nuova);
     setConfermata(nuova);
     setStep(3);
   }
-
-  // RESET FORM
   function reset() {
     setStep(1);
     setSelezionato(null);
@@ -70,23 +56,20 @@ export default function Transazioni() {
     setConfermata(null);
   }
 
-  const cssTipo = { "CategoriaA": "tipo-a", "CategoriaB": "tipo-b", "CategoriaC": "tipo-c" };
+  const cssTipo = { [TIPI[0]]: "tipo-a", [TIPI[1]]: "tipo-b", [TIPI[2]]: "tipo-c" };
 
   return (
     <div>
-      {/* HEADER */}
       <div className="sezione-header">
         <div>
-          {/* ✏️ ESAME: cambia titolo e sottotitolo */}
-          <h2 className="titolo-pagina">Nuova transazione</h2>
-          <p className="sottotitolo">Scegli un elemento e completa i dettagli</p>
+          <h2 className="titolo-pagina">Nuova prenotazione</h2>
+          <p className="sottotitolo">Scegli un evento e completa la prenotazione</p>
         </div>
       </div>
 
-      {/* STEP INDICATOR */}
       <div className="step-indicatori">
         {[
-          "Scegli elemento",    // ✏️ ESAME: rinomina gli step se necessario
+          "Scegli evento", 
           "Dettagli",
           "Conferma",
         ].map((s, i) => (
@@ -100,12 +83,11 @@ export default function Transazioni() {
         ))}
       </div>
 
-      {/* ============ STEP 1 — SELEZIONE ELEMENTO ============ */}
       {step === 1 && (
         <div>
           <p className="istruzione">Seleziona l'elemento da utilizzare:</p>
           <div className="griglia-elementi">
-            {elementiDisponibili.map(e => (
+            {eventiDisponibili.map(e => (
               <div
                 key={e.id}
                 className={`card card-elemento card-selezionabile ${
@@ -114,21 +96,20 @@ export default function Transazioni() {
                 onClick={() => setSelezionato(e)}
               >
                 <div className="card-elemento-header">
-                  <span className={`badge-tipo ${cssTipo[e.tipo] || "tipo-a"}`}>
+                  <span className={`badge-tipo ${cssTipo[e.tipo] || "ArenaA"}`}>
                     {e.tipo}
                   </span>
                 </div>
                 <h3 className="nome-elemento">{e.nome}</h3>
                 <div className="info-elemento">
-                  {/* ✏️ ESAME: cambia label campo1 e campo2 */}
-                  <span>Campo1: {e.campo1}</span>
-                  <span>Campo2: {e.campo2}</span>
+                  <span>Data: {e.Data}</span>
+                  <span>Capienza: {e.Capienza}</span>
                 </div>
               </div>
             ))}
           </div>
-          {elementiDisponibili.length === 0 && (
-            <div className="stato-vuoto">Nessun elemento disponibile.</div>
+          {eventiDisponibili.length === 0 && (
+            <div className="stato-vuoto">Nessun evento disponibile.</div>
           )}
           {selezionato && (
             <div className="azioni-step">
@@ -139,12 +120,10 @@ export default function Transazioni() {
           )}
         </div>
       )}
-
-      {/* ============ STEP 2 — DETTAGLI TRANSAZIONE ============ */}
       {step === 2 && (
         <div>
-          <div className="riepilogo-elemento">
-            <span className={`badge-tipo ${cssTipo[selezionato.tipo] || "tipo-a"}`}>
+          <div className="riepilogo-evento">
+            <span className={`badge-tipo ${cssTipo[selezionato.tipo] || "ArenaA"}`}>
               {selezionato.tipo}
             </span>
             <strong>{selezionato.nome}</strong>
@@ -152,8 +131,7 @@ export default function Transazioni() {
               Cambia
             </button>
           </div>
-          <form onSubmit={conferma} className="form-transazione">
-            {/* ✏️ ESAME: cambia "Nome utente" con il campo appropriato */}
+          <form onSubmit={conferma} className="form-prenotazione">
             <CampoForm label="Nome utente" errore={errori.utente}>
               <input
                 value={form.utente}
@@ -191,10 +169,9 @@ export default function Transazioni() {
             {quantita > 0 && (
               <div className="anteprima-costo">
                 <span className="costo-dettaglio">
-                  {quantita}h × {selezionato.campo2}
+                  {quantita}h × {selezionato.Capienza}
                 </span>
                 <span className="costo-totale">
-                  {/* ✏️ ESAME: cambia "€" con la moneta/unità corretta */}
                   Totale: {totale.toFixed(0)}
                 </span>
               </div>
@@ -215,19 +192,16 @@ export default function Transazioni() {
           </form>
         </div>
       )}
-
-      {/* ============ STEP 3 — CONFERMA ============ */}
       {step === 3 && confermata && (
         <div className="card conferma-card">
           <div className="conferma-icona">✓</div>
           <h3 className="conferma-titolo">Operazione confermata!</h3>
           <div className="riepilogo-grid">
-            {/* ✏️ ESAME: cambia le label del riepilogo se necessario */}
             <span className="riep-label">Utente</span>
             <span className="riep-valore">{confermata.utente}</span>
 
-            <span className="riep-label">Elemento</span>
-            <span className="riep-valore">{confermata.elementoNome}</span>
+            <span className="riep-label">Evento</span>
+            <span className="riep-valore">{confermata.eventoId}</span>
 
             <span className="riep-label">Data</span>
             <span className="riep-valore">
@@ -263,9 +237,6 @@ export default function Transazioni() {
   );
 }
 
-// ============================================================
-// COMPONENTE UTILITY — CAMPO FORM
-// ============================================================
 function CampoForm({ label, errore, children }) {
   return (
     <div className="campo">

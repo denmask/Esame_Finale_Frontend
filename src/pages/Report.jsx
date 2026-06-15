@@ -1,45 +1,34 @@
 import { useRef, useEffect } from "react";
 import { useDati, TIPI, STATI } from "../data";
 
-// ============================================================
-// PAGINA REPORT
-// Contiene: KPI, 3 grafici (Chart.js), tabella cronologica
-// ============================================================
-
 export default function Report() {
-  const { transazioni, elementi } = useDati();
+  const { prenotazioni, eventi } = useDati();
 
-  // CALCOLI KPI
-  const totaleValore = transazioni.reduce((s, t) => s + t.totale, 0);
-  const totaleQuantita = transazioni.reduce((s, t) => s + t.quantita, 0);
+  const totaleValore = prenotazioni.reduce((s, p) => s + (p.totale || 0), 0);
+  const totaleQuantita = prenotazioni.reduce((s, p) => s + (p.quantita || 0), 0);
 
-  // CONTEGGIO PER TIPO
   const conteggioTipi = TIPI.reduce((acc, t) => {
-    acc[t] = transazioni.filter(t2 => t2.tipo === t).length;
+    acc[t] = prenotazioni.filter(p => p.tipo === t).length;
     return acc;
   }, {});
 
-  // DATI PER LINEA (andamento nel tempo)
   const perGiorno = {};
-  transazioni.forEach(t => {
-    perGiorno[t.data] = (perGiorno[t.data] || 0) + t.totale;
+  prenotazioni.forEach(p => {
+    perGiorno[p.data] = (perGiorno[p.data] || 0) + p.totale;
   });
   const giorniOrdinati = Object.keys(perGiorno).sort();
 
-  // TASSO PER TIPO
   const tassoTipi = TIPI.map(t => {
-    const tot = elementi.filter(e => e.tipo === t).length;
-    const pren = transazioni.filter(t2 => t2.tipo === t).length;
+    const tot = eventi.filter(e => e.tipo === t).length;
+    const pren = prenotazioni.filter(p => p.tipo === t).length;
     return { tipo: t, tasso: tot > 0 ? Math.round((pren / (tot * 10)) * 100) : 0 };
   });
 
-  // REFS PER GRAFICI CHART.JS
   const refTorta = useRef(null);
   const refBarre = useRef(null);
   const refLinee = useRef(null);
   const chartsRef = useRef({});
 
-  // CARICA E RENDERIZZA GRAFICI
   useEffect(() => {
     const script = document.createElement("script");
     script.src = "https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js";
@@ -47,7 +36,6 @@ export default function Report() {
       const Chart = window.Chart;
       const palette = ["#1a1a1a", "#666666", "#b0b0b0"];
 
-      // GRAFICO TORTA
       if (refTorta.current && !chartsRef.current.torta) {
         chartsRef.current.torta = new Chart(refTorta.current, {
           type: "doughnut",
@@ -70,7 +58,6 @@ export default function Report() {
         });
       }
 
-      // GRAFICO BARRE
       if (refBarre.current && !chartsRef.current.barre) {
         chartsRef.current.barre = new Chart(refBarre.current, {
           type: "bar",
@@ -102,8 +89,6 @@ export default function Report() {
           },
         });
       }
-
-      // GRAFICO LINEA
       if (refLinee.current && !chartsRef.current.linee) {
         chartsRef.current.linee = new Chart(refLinee.current, {
           type: "line",
@@ -148,56 +133,48 @@ export default function Report() {
     };
   }, []);
 
-  // TABELLA ORDINATA
-  const ordinate = [...transazioni].sort((a, b) =>
+  const ordinate = [...prenotazioni].sort((a, b) =>
     b.data.localeCompare(a.data)
   );
 
   return (
     <div>
-      {/* HEADER */}
       <div className="sezione-header">
         <div>
-          {/* ✏️ ESAME: cambia titolo report se necessario */}
           <h2 className="titolo-pagina">Reportistica</h2>
-          <p className="sottotitolo">Analisi delle transazioni</p>
+          <p className="sottotitolo">Analisi delle prenotazioni</p>
         </div>
       </div>
 
-      {/* KPI CARDS */}
       <div className="kpi-grid">
         <div className="kpi-card">
-          <span className="kpi-label">Transazioni totali</span>
-          <span className="kpi-valore">{transazioni.length}</span>
+          <span className="kpi-label">Prenotazioni totali</span>
+          <span className="kpi-valore">{prenotazioni.length}</span>
         </div>
         <div className="kpi-card">
           <span className="kpi-label">Valore totale</span>
-          {/* ✏️ ESAME: cambia "€" con l'unità di misura corretta */}
           <span className="kpi-valore">
             €{totaleValore.toLocaleString("it-IT")}
           </span>
         </div>
         <div className="kpi-card">
-          <span className="kpi-label">Quantità totale</span>
+          <span className="kpi-label">Ore totali</span>
           <span className="kpi-valore">{totaleQuantita}</span>
         </div>
         <div className="kpi-card">
-          <span className="kpi-label">Media per transazione</span>
+          <span className="kpi-label">Media prenotazione</span>
           <span className="kpi-valore">
             €
-            {transazioni.length > 0
-              ? (totaleValore / transazioni.length).toFixed(0)
+            {prenotazioni.length > 0
+              ? (totaleValore / prenotazioni.length).toFixed(0)
               : 0}
           </span>
         </div>
       </div>
 
-      {/* GRAFICI RIGA 1 */}
       <div className="grafici-griglia">
-        {/* TORTA */}
         <div className="grafico-card">
           <h3 className="grafico-titolo">Distribuzione per tipo</h3>
-          {/* ✏️ ESAME: cambia titolo grafico se necessario */}
           <div className="legenda-torta">
             {TIPI.map((t, i) => (
               <span key={t} className="legenda-voce">
@@ -220,10 +197,8 @@ export default function Report() {
           </div>
         </div>
 
-        {/* BARRE */}
         <div className="grafico-card">
           <h3 className="grafico-titolo">Tasso per tipo</h3>
-          {/* ✏️ ESAME: cambia titolo grafico se necessario */}
           <div style={{ position: "relative", height: "240px" }}>
             <canvas
               ref={refBarre}
@@ -234,10 +209,8 @@ export default function Report() {
         </div>
       </div>
 
-      {/* GRAFICO RIGA 2 */}
       <div className="grafico-card grafico-largo">
         <h3 className="grafico-titolo">Andamento nel tempo</h3>
-        {/* ✏️ ESAME: cambia titolo grafico se necessario */}
         <div style={{ position: "relative", height: "240px" }}>
           <canvas
             ref={refLinee}
@@ -247,38 +220,35 @@ export default function Report() {
         </div>
       </div>
 
-      {/* TABELLA CRONOLOGIA */}
       <div className="card">
-        <h3 className="card-titolo">Cronologia transazioni</h3>
-        {/* ✏️ ESAME: cambia titolo tabella se necessario */}
+        <h3 className="card-titolo">Cronologia prenotazioni</h3>
         <div className="tabella-wrapper">
           <table className="tabella">
             <thead>
               <tr>
-                {/* ✏️ ESAME: cambia le intestazioni delle colonne */}
                 <th>Data</th>
                 <th>Utente</th>
-                <th>Elemento</th>
+                <th>Evento</th>
                 <th>Tipo</th>
                 <th>Orario</th>
-                <th>Quantità</th>
+                <th>Ore</th>
                 <th>Totale</th>
               </tr>
             </thead>
             <tbody>
-              {ordinate.map(t => (
-                <tr key={t.id}>
-                  <td>{new Date(t.data).toLocaleDateString("it-IT")}</td>
-                  <td>{t.utente}</td>
-                  <td>{t.elementoNome}</td>
+              {ordinate.map(p => (
+                <tr key={p.id}>
+                  <td>{new Date(p.data).toLocaleDateString("it-IT")}</td>
+                  <td>{p.utente}</td>
+                  <td>{eventi.find(e => e.id === p.eventoId)?.nome || "N/A"}</td>
                   <td>
-                    <span className="badge-tipo-mini">{t.tipo}</span>
+                    <span className="badge-tipo-mini">{p.tipo}</span>
                   </td>
                   <td>
-                    {t.inizio}–{t.fine}
+                    {p.inizio}–{p.fine}
                   </td>
-                  <td>{t.quantita}</td>
-                  <td className="cella-totale">{t.totale}</td>
+                  <td>{p.quantita}</td>
+                  <td className="cella-totale">{p.totale}</td>
                 </tr>
               ))}
             </tbody>
